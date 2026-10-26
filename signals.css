@@ -1,0 +1,239 @@
+/* Signals theme: a cyberpunk BCI console. Loaded after style.css and overrides it. */
+:root {
+  --bg: #07060d;
+  --text: #ecebf5;
+  --muted: #8f8aa8;
+  --line: rgba(160, 140, 255, 0.16);
+  --panel: rgba(18, 14, 34, 0.72);
+  --accent: #2ef2ff;          /* neon cyan */
+  --accent-2: #ff2e88;        /* neon magenta */
+  --accent-soft: rgba(46, 242, 255, 0.1);
+  --surface-water: #07060d;
+}
+
+html { background: var(--bg); }
+body {
+  background:
+    radial-gradient(900px 500px at 85% -10%, rgba(255, 46, 136, 0.14), transparent 60%),
+    radial-gradient(800px 500px at -10% 10%, rgba(46, 242, 255, 0.10), transparent 60%),
+    linear-gradient(rgba(160, 140, 255, 0.045) 1px, transparent 1px) 0 0 / 100% 32px,
+    linear-gradient(90deg, rgba(160, 140, 255, 0.045) 1px, transparent 1px) 0 0 / 32px 100%,
+    var(--bg);
+}
+
+/* Nav */
+.topbar.scrolled { background: rgba(7, 6, 13, 0.8); border-bottom-color: var(--line); }
+.brand { font-family: var(--mono); letter-spacing: .04em; }
+.brand::before { content: "▍"; color: var(--accent-2); margin-right: 6px; }
+.topbar nav a { font-family: var(--mono); font-size: 13px; }
+
+/* Hero with live traces behind */
+.hero { padding-top: 96px; padding-bottom: 20px; overflow: hidden; }
+#traces {
+  position: absolute; left: -24px; right: -24px; top: 56px; height: 260px; width: calc(100% + 48px);
+  opacity: .55; pointer-events: auto;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 70%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 12%, #000 70%, transparent);
+}
+.ch-labels {
+  position: absolute; left: 0; top: 56px; height: 260px;
+  display: flex; flex-direction: column; justify-content: space-around;
+  font-size: 10px; color: rgba(143, 138, 168, 0.55); pointer-events: none;
+}
+.hero-inner { pointer-events: none; }
+.hero-inner a, .hero-inner .portrait { pointer-events: auto; }
+.name {
+  font-family: var(--serif); letter-spacing: -0.01em;
+  text-shadow: 0 0 24px rgba(46, 242, 255, 0.25);
+}
+.name-ko { color: var(--muted); }
+
+/* Perspective grid floor under the hero */
+.hero::after {
+  content: ""; position: absolute; left: -10%; right: -10%; bottom: -1px; height: 120px; z-index: -1;
+  background:
+    linear-gradient(rgba(255, 46, 136, 0.35) 1px, transparent 1px) 0 0 / 100% 18px,
+    linear-gradient(90deg, rgba(255, 46, 136, 0.35) 1px, transparent 1px) 0 0 / 46px 100%;
+  transform: perspective(260px) rotateX(62deg); transform-origin: 50% 100%;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 70%);
+          mask-image: linear-gradient(180deg, transparent, #000 70%);
+  opacity: .5;
+}
+
+/* Portrait: neon ring */
+.portrait {
+  background: #120e22;
+  border: 1px solid rgba(46, 242, 255, 0.55);
+  box-shadow: 0 0 0 5px rgba(255, 46, 136, 0.12), 0 0 30px rgba(46, 242, 255, 0.25);
+}
+
+/* Links */
+.links a, .pbtn { color: var(--accent); }
+.links a:hover, .pbtn:hover { background: rgba(46, 242, 255, 0.12); color: #fff; }
+
+/* BCI readout panel */
+.bci {
+  position: relative; display: grid; grid-template-columns: auto 1fr; gap: 28px;
+  margin: 18px 0 8px; padding: 18px 20px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255, 46, 136, 0.05), 0 0 40px rgba(46, 242, 255, 0.05);
+}
+.bci::before { /* corner accents */
+  content: ""; position: absolute; inset: -1px; border-radius: 10px; pointer-events: none;
+  background:
+    linear-gradient(var(--accent), var(--accent)) 0 0 / 14px 1px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) 0 0 / 1px 14px no-repeat,
+    linear-gradient(var(--accent-2), var(--accent-2)) 100% 100% / 14px 1px no-repeat,
+    linear-gradient(var(--accent-2), var(--accent-2)) 100% 100% / 1px 14px no-repeat;
+}
+.bci-title { margin: 0 0 10px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.bci-title #latency { color: var(--accent); }
+.dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 8px var(--accent-2); margin: 0 4px 1px; animation: rec 1.2s steps(1) infinite; }
+@keyframes rec { 50% { opacity: .2; } }
+.ecog { display: grid; grid-template-columns: repeat(8, 14px); gap: 5px; }
+.ecog i {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: rgba(46, 242, 255, 0.08); border: 1px solid rgba(46, 242, 255, 0.25);
+  transition: background .12s, box-shadow .12s;
+}
+.intents { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.intents li { display: grid; grid-template-columns: 92px 1fr 40px; align-items: center; gap: 10px; font: 12px var(--mono); color: var(--muted); }
+.intents .bar { height: 6px; border-radius: 3px; background: rgba(160, 140, 255, 0.12); overflow: hidden; }
+.intents .bar b { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); box-shadow: 0 0 10px rgba(46, 242, 255, .5); transition: width .35s ease; }
+.intents li.top { color: var(--text); }
+.intents .p { text-align: right; color: var(--accent); }
+.bci-note { margin: 12px 0 0; font-size: 11px; color: rgba(143, 138, 168, 0.6); }
+
+/* Bio */
+.about a { text-decoration-color: rgba(46, 242, 255, 0.55); }
+.about a:hover { color: var(--accent); }
+.about strong { color: #fff; }
+.cta-line { border-left-color: var(--accent-2); }
+
+/* Headings get a thin neon underline */
+.section h2 { position: relative; display: inline-block; font-family: var(--serif); }
+.section h2::after {
+  content: ""; position: absolute; left: 0; right: -24px; bottom: -6px; height: 1px;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent) 60%, transparent);
+}
+.subhead { color: var(--muted); }
+.news time, .timeline time, .venue { color: var(--accent); }
+.authors b { color: #fff; }
+
+/* Cards and figures */
+.theme { background: var(--panel); border-color: var(--line); }
+.theme:hover { border-color: rgba(255, 46, 136, 0.45); box-shadow: 0 0 24px rgba(255, 46, 136, 0.08); }
+.pub-fig img { border-color: rgba(46, 242, 255, 0.25); }
+.pub-side .pub-fig a:hover img { box-shadow: 0 0 0 1px var(--accent), 0 10px 30px rgba(46, 242, 255, .18); }
+
+@media (prefers-reduced-motion: reduce) { .dot { animation: none; } }
+@media (max-width: 680px) {
+  .hero { padding-top: 84px; }
+  .bci { grid-template-columns: 1fr; gap: 18px; }
+  .ch-labels { display: none; }
+}
+
+/* Theme switch: points back to the deep-water theme */
+.sw-dot { background: linear-gradient(180deg, #8ed6e8, #15506b); box-shadow: 0 0 6px rgba(142, 214, 232, .6); }
+.topbar nav .theme-switch { font-family: var(--mono); }
+
+/* ================= Full cyberpunk pass ================= */
+:root { --display: "Chakra Petch", var(--mono); }
+
+/* Faint scanlines over everything */
+.scan {
+  position: fixed; inset: 0; z-index: 30; pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.22) 0 1px, transparent 1px 3px);
+  mix-blend-mode: multiply; opacity: .55;
+}
+
+/* Name: chromatic split + occasional neon flicker */
+.name {
+  font-family: var(--display); font-weight: 700; letter-spacing: .01em; text-transform: uppercase;
+  font-size: clamp(2rem, 5.4vw, 3.3rem);
+  color: #f4f2ff;
+  text-shadow: -2px 0 rgba(255, 46, 136, .75), 2px 0 rgba(46, 242, 255, .75), 0 0 28px rgba(46, 242, 255, .35);
+  animation: flicker 7s infinite;
+}
+@keyframes flicker { 0%, 93%, 100% { opacity: 1; } 94% { opacity: .55; } 95% { opacity: 1; } 96.5% { opacity: .7; } 97.5% { opacity: 1; } }
+.name-ko { font-family: var(--mono); letter-spacing: .3em; color: var(--accent-2); text-shadow: 0 0 10px rgba(255, 46, 136, .5); }
+
+/* Section headings: display font, neon glow, index tag */
+main { counter-reset: sec; }
+.section h2 {
+  font-family: var(--display); font-weight: 600; text-transform: uppercase; letter-spacing: .08em;
+  font-size: 1.45rem; color: #fff;
+  text-shadow: 0 0 14px rgba(46, 242, 255, .45);
+}
+.section:not(.about-section) h2::before {
+  counter-increment: sec; content: "0" counter(sec) " //";
+  margin-right: 10px; color: var(--accent-2); font-size: .8em; text-shadow: 0 0 10px rgba(255, 46, 136, .6);
+}
+.section h2::after { height: 2px; box-shadow: 0 0 10px rgba(255, 46, 136, .6); }
+.subhead { font-family: var(--display); text-transform: uppercase; letter-spacing: .1em; font-size: 1rem; color: var(--accent); }
+.section-lede { font-family: var(--mono); font-size: 13px; }
+
+/* Cards: clipped corners, neon edge */
+.theme {
+  border-radius: 0; border: 1px solid rgba(46, 242, 255, .28);
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+  background: linear-gradient(135deg, rgba(46, 242, 255, .06), rgba(255, 46, 136, .05)), var(--panel);
+}
+.theme h3 { font-family: var(--display); text-transform: uppercase; letter-spacing: .06em; color: var(--accent); text-shadow: 0 0 10px rgba(46, 242, 255, .4); }
+.theme:hover { border-color: var(--accent-2); box-shadow: inset 0 0 30px rgba(255, 46, 136, .12); }
+
+/* BCI panel: clipped too */
+.bci { border-radius: 0; clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px)); border-color: rgba(46, 242, 255, .3); }
+.bci::before { border-radius: 0; }
+
+/* Publications */
+.pub-title { font-family: var(--display); font-weight: 600; letter-spacing: .02em; }
+a.pub-title:hover { color: var(--accent); text-shadow: 0 0 12px rgba(46, 242, 255, .5); }
+.venue { font-family: var(--mono); font-style: normal; font-size: 12.5px; color: var(--accent-2); }
+.pub-side .pub-fig img { border-radius: 0; filter: saturate(.9) contrast(1.05); }
+.pbtn, .links a { font-family: var(--mono); }
+.pbtn:hover, .links a:hover { box-shadow: 0 0 14px rgba(46, 242, 255, .35); }
+
+/* News */
+.news time { color: var(--accent-2); text-shadow: 0 0 8px rgba(255, 46, 136, .45); }
+.news li { border-top-color: rgba(160, 140, 255, .14); }
+.older summary { color: var(--accent); }
+
+/* Bio + CTA */
+.about strong { color: var(--accent); text-shadow: 0 0 10px rgba(46, 242, 255, .35); font-weight: 600; }
+.cta-line { font-family: var(--mono); font-style: normal; font-size: 14px; border-left: 2px solid var(--accent-2); box-shadow: -6px 0 14px -8px var(--accent-2); }
+.cta-line::before { content: "> "; color: var(--accent-2); }
+
+/* Selection + scrollbar */
+::selection { background: var(--accent-2); color: #fff; }
+html { scrollbar-color: var(--accent-2) #0c0a16; }
+
+.footer { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; }
+
+@media (prefers-reduced-motion: reduce) { .name { animation: none; } }
+
+/* Interactivity cues */
+#traces { cursor: crosshair; }
+.ecog i { cursor: pointer; }
+.ecog i:hover { border-color: var(--accent-2); }
+.intents li { cursor: pointer; padding: 3px 6px; margin: 0 -6px; border-radius: 4px; transition: background .2s; outline: none; }
+.intents li:hover, .intents li:focus-visible { background: rgba(46, 242, 255, 0.07); }
+.intents li.picked { background: rgba(255, 46, 136, 0.12); color: #fff; }
+.intents li.picked span:first-child::before { content: "▸ "; color: var(--accent-2); }
+
+/* ECoG on the brain */
+.ecog { display: block; width: 300px; max-width: 100%; }
+.brain { display: block; width: 100%; height: auto; overflow: visible; }
+.brain .cortex { fill: url(#cortex); stroke: var(--accent); stroke-width: 1.4; filter: drop-shadow(0 0 6px rgba(46, 242, 255, .55)); }
+.brain .cerebellum { fill: #0d0a1c; stroke: rgba(255, 46, 136, .6); stroke-width: 1; }
+.brain .stem { fill: none; stroke: rgba(255, 46, 136, .5); stroke-width: 7; stroke-linecap: round; }
+.brain .sulci path { fill: none; stroke: rgba(160, 140, 255, .35); stroke-width: 1; stroke-linecap: round; }
+.brain .sulci .central { stroke: rgba(255, 46, 136, .55); }
+.brain .electrodes circle { fill: rgba(46, 242, 255, .15); stroke: rgba(46, 242, 255, .35); stroke-width: .6; cursor: pointer; transition: r .15s; }
+.brain .electrodes circle:hover { r: 5; stroke: var(--accent-2); }
+.brain .region-label text { font: 600 9px var(--mono); letter-spacing: .12em; text-transform: uppercase; fill: var(--accent-2); }
+@media (max-width: 680px) { .ecog { width: 100%; } }
+.brain .folia { fill: none; stroke: rgba(255, 46, 136, .35); stroke-width: .8; }
+.brain .sulci .sylvian { stroke: rgba(160, 140, 255, .55); stroke-width: 1.3; }
+.brain .region-label text { font-size: 10px; }
+.intents li { grid-template-columns: 118px 1fr 40px; }
